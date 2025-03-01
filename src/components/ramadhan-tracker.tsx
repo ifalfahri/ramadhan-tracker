@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { addDays, differenceInDays, format } from "date-fns";
+import { enUS, id } from "date-fns/locale"
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -37,7 +38,7 @@ const getRamadhanDates = () => {
 };
 
 export function RamadhanTracker() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { ramadhanStart, ramadhanEnd } = getRamadhanDates();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [records, setRecords] = useState<DailyRecord[]>([]);
@@ -144,9 +145,13 @@ export function RamadhanTracker() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-2xl font-bold">
-            {format(currentDate, "EEEE, MMMM d, yyyy")}
-          </p>
+        <p className="text-2xl font-bold">
+  {format(
+    currentDate, 
+    "EEEE, d MMMM yyyy", 
+    { locale: i18n.language === "id" ? id : enUS }
+  )}
+</p>
         </CardContent>
       </Card>
 
