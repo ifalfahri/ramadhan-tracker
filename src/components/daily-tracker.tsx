@@ -63,7 +63,7 @@ export function DailyTracker({ record, onUpdateActivity }: DailyTrackerProps) {
       {activities.map((activity) => (
         <div
           key={activity.id}
-          className="flex items-center space-x-4 p-2 rounded-lg hover:bg-muted/50 transition-colors"
+          className="flex items-center space-x-4 p-2 rounded-lg hover:bg-primary/10 transition-colors"
         >
           <div className="flex-shrink-0">{activity.icon}</div>
           <div className="flex-grow">

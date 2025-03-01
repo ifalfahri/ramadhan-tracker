@@ -134,63 +134,71 @@ export function RamadhanTracker() {
   };
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("appTitle")}</CardTitle>
-          <CardDescription>
-            {isRamadhan
-              ? t("todayIs", { day: dayOfRamadhan })
-              : t("notRamadhan")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-2xl font-bold">
-            {format(currentDate, "EEEE, d MMMM yyyy", {
-              locale: i18n.language === "id" ? id : enUS,
-            })}
-          </p>
-        </CardContent>
-      </Card>
-
-      {isRamadhan && (
-        <Card>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-full">
+      <div className="space-y-4">
+        <Card className="h-auto gap-2">
           <CardHeader>
-            <CardTitle>{t("todayActivities")}</CardTitle>
-            <CardDescription>{t("trackActivities")}</CardDescription>
+            <CardTitle>{t("appTitle")}</CardTitle>
+            <CardDescription>
+              {isRamadhan
+                ? t("todayIs", { day: dayOfRamadhan })
+                : t("notRamadhan")}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <DailyTracker
-              record={getCurrentDateRecord()}
-              onUpdateActivity={updateActivity}
-            />
-            <div className="mt-4 flex justify-end md:jus">
-              <Button className="w-full sm:w-auto" onClick={saveData}>
-                {t("saveProgress")}
-              </Button>
-            </div>
+            <p className="text-2xl font-bold">
+              {format(currentDate, "EEEE, d MMMM yyyy", {
+                locale: i18n.language === "id" ? id : enUS,
+              })}
+            </p>
           </CardContent>
         </Card>
-      )}
+
+        {isRamadhan && (
+          <Card className="h-auto flex-grow">
+            <CardHeader>
+              <CardTitle>{t("todayActivities")}</CardTitle>
+              <CardDescription>{t("trackActivities")}</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col h-full">
+              <div className="flex-grow">
+                <DailyTracker
+                  record={getCurrentDateRecord()}
+                  onUpdateActivity={updateActivity}
+                />
+              </div>
+              <div className="mt-4">
+                <Button className="w-full" onClick={saveData}>
+                  {t("saveProgress")}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       <Card>
         <CardHeader>
           <CardTitle>{t("ramadhanJourney")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="summary">
+          <Tabs defaultValue="summary" className="flex flex-col">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="summary">{t("summary")}</TabsTrigger>
               <TabsTrigger value="statistics">{t("statistics")}</TabsTrigger>
             </TabsList>
-            <TabsContent value="summary" className="mt-4">
-              <ProgressSummary records={records} />
-            </TabsContent>
-            <TabsContent value="statistics" className="mt-4">
-              <div className="text-center py-8">
-                <p className="text-muted-foreground">{t("statsComingSoon")}</p>
-              </div>
-            </TabsContent>
+            <div className="flex-grow overflow-auto">
+              <TabsContent value="summary" className="mt-4">
+                <ProgressSummary records={records} />
+              </TabsContent>
+              <TabsContent value="statistics" className="mt-4 h-full">
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">
+                    {t("statsComingSoon")}
+                  </p>
+                </div>
+              </TabsContent>
+            </div>
           </Tabs>
         </CardContent>
       </Card>

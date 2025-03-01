@@ -91,13 +91,13 @@ export function ProgressSummary({ records }: ProgressSummaryProps) {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 bg-background dark:bg-emerald-900/50 rounded-lg">
-          <h3 className="text-lg font-medium mb-2">{t("daysTracked")}</h3>
+          <h3 className="text-md font-medium mb-2">{t("daysTracked")}</h3>
           <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
             {totalDays}
           </p>
         </div>
-        <div className="p-4 bg-background dark:bg-emerald-900/50 rounded-lg">
-          <h3 className="text-lg font-medium mb-2">{t("perfectDays")}</h3>
+        <div className="p-4 bg-background dark:bg-emerald-900/50 rounded-md">
+          <h3 className="text-md font-medium mb-2">{t("perfectDays")}</h3>
           <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
             {perfectDays}
           </p>
