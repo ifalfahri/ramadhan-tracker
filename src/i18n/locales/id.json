@@ -1,5 +1,5 @@
 {
-  "appTitle": "Pelacak Ramadhan",
+  "appTitle": "Ramadhan Tracker",
   "todayIs": "Hari ini adalah Hari ke-{{day}} Ramadhan",
   "notRamadhan": "Saat ini bukan bulan Ramadhan",
   "todayActivities": "Aktivitas Hari Ini",
@@ -24,6 +24,10 @@
     "tarawih": "Sholat Tarawih"
   },
   "language": "Bahasa",
-  "english": "Inggris",
-  "indonesian": "Bahasa Indonesia"
+  "english": "English",
+  "indonesian": "Bahasa Indonesia",
+  "theme": "Tema",
+  "light": "Terang",
+  "dark": "Gelap",
+  "system": "Sistem"
 }

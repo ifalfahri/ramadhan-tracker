@@ -25,5 +25,9 @@
   },
   "language": "Language",
   "english": "English",
-  "indonesian": "Bahasa Indonesia"
+  "indonesian": "Bahasa Indonesia",
+  "theme": "Theme",
+  "light": "Light",
+  "dark": "Dark",
+  "system": "System"
 }

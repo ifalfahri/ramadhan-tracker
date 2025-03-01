@@ -1,9 +1,9 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import { initReactI18next } from "react-i18next";
 
-import enTranslation from './locales/en.json';
-import idTranslation from './locales/id.json';
+import enTranslation from "./locales/en.json";
+import idTranslation from "./locales/id.json";
 
 i18n
   .use(LanguageDetector)
@@ -17,10 +17,10 @@ i18n
         translation: idTranslation,
       },
     },
-    fallbackLng: 'en',
+    fallbackLng: "en",
     detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
+      order: ["localStorage", "navigator"],
+      caches: ["localStorage"],
     },
     interpolation: {
       escapeValue: false, // React already safes from XSS
