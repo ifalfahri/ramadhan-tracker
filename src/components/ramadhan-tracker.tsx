@@ -1,0 +1,163 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { format, differenceInDays, addDays } from "date-fns"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { DailyTracker } from "@/components/daily-tracker"
+import { ProgressSummary } from "@/components/progress-summary"
+
+// Define the structure for tracking activities
+export type Activity = "puasa" | "shubuh" | "dzuhr" | "ashr" | "maghrib" | "isya" | "tarawih"
+export type DailyRecord = {
+  date: string // ISO string format
+  activities: Record<Activity, boolean>
+}
+
+// Get Ramadhan dates
+const getRamadhanDates = () => {
+  const currentYear = new Date().getFullYear()
+  const ramadhanStart = new Date(currentYear, 2, 1) // March 1, 2024
+  const ramadhanEnd = addDays(ramadhanStart, 29) // 30 days later
+
+  return { ramadhanStart, ramadhanEnd }
+}
+
+export function RamadhanTracker() {
+  const { ramadhanStart, ramadhanEnd } = getRamadhanDates()
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [records, setRecords] = useState<DailyRecord[]>([])
+
+  // Calculate the current day of Ramadhan
+  const dayOfRamadhan = differenceInDays(currentDate, ramadhanStart) + 1
+
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    const savedRecords = localStorage.getItem("ramadhanRecords")
+    if (savedRecords) {
+      setRecords(JSON.parse(savedRecords))
+    }
+  }, [])
+
+  // Save data to localStorage whenever records change
+  useEffect(() => {
+    localStorage.setItem("ramadhanRecords", JSON.stringify(records))
+  }, [records])
+
+  // Update the current date every minute
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDate(new Date())
+    }, 60000) // 60000 milliseconds = 1 minute
+
+    return () => clearInterval(timer)
+  }, [])
+
+  // Get record for the current date
+  const getCurrentDateRecord = () => {
+    const dateString = currentDate.toISOString().split("T")[0]
+    return (
+      records.find((record) => record.date === dateString) || {
+        date: dateString,
+        activities: {
+          puasa: false,
+          shubuh: false,
+          dzuhr: false,
+          ashr: false,
+          maghrib: false,
+          isya: false,
+          tarawih: false,
+        },
+      }
+    )
+  }
+
+  // Update activity status
+  const updateActivity = (activity: Activity, completed: boolean) => {
+    const dateString = currentDate.toISOString().split("T")[0]
+    const existingRecordIndex = records.findIndex((record) => record.date === dateString)
+
+    if (existingRecordIndex >= 0) {
+      // Update existing record
+      const updatedRecords = [...records]
+      updatedRecords[existingRecordIndex] = {
+        ...updatedRecords[existingRecordIndex],
+        activities: {
+          ...updatedRecords[existingRecordIndex].activities,
+          [activity]: completed,
+        },
+      }
+      setRecords(updatedRecords)
+    } else {
+      // Create new record
+      const newRecord: DailyRecord = {
+        date: dateString,
+        activities: {
+          puasa: false,
+          shubuh: false,
+          dzuhr: false,
+          ashr: false,
+          maghrib: false,
+          isya: false,
+          tarawih: false,
+          [activity]: completed,
+        },
+      }
+      setRecords([...records, newRecord])
+    }
+  }
+
+  // Check if the current date is within Ramadhan
+  const isRamadhan = currentDate >= ramadhanStart && currentDate <= ramadhanEnd
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Ramadhan Tracker</CardTitle>
+          <CardDescription>
+            {isRamadhan ? `Today is Day ${dayOfRamadhan} of Ramadhan` : "It's not currently Ramadhan"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-2xl font-bold">{format(currentDate, "EEEE, MMMM d, yyyy")}</p>
+        </CardContent>
+      </Card>
+
+      {isRamadhan && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Today's Activities</CardTitle>
+            <CardDescription>Track your daily activities</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DailyTracker record={getCurrentDateRecord()} onUpdateActivity={updateActivity} />
+          </CardContent>
+        </Card>
+      )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Your Ramadhan Journey</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="summary">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="summary">Summary</TabsTrigger>
+              <TabsTrigger value="statistics">Statistics</TabsTrigger>
+            </TabsList>
+            <TabsContent value="summary" className="mt-4">
+              <ProgressSummary records={records} />
+            </TabsContent>
+            <TabsContent value="statistics" className="mt-4">
+              <div className="text-center py-8">
+                <p className="text-muted-foreground">Detailed statistics will be available as you track more days.</p>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
