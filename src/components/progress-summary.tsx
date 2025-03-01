@@ -1,5 +1,3 @@
-"use client"
-
 import type { DailyRecord } from "@/components/ramadhan-tracker"
 import { Progress } from "@/components/ui/progress"
 import { Moon, Sunrise, Sun, Sunset, CloudMoon, Star, Coffee } from "lucide-react"

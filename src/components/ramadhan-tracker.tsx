@@ -1,11 +1,10 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { format, differenceInDays, addDays } from "date-fns"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DailyTracker } from "@/components/daily-tracker"
 import { ProgressSummary } from "@/components/progress-summary"
+import { Button } from "@/components/ui/button"
 
 // Define the structure for tracking activities
 export type Activity = "puasa" | "shubuh" | "dzuhr" | "ashr" | "maghrib" | "isya" | "tarawih"
@@ -40,9 +39,10 @@ export function RamadhanTracker() {
   }, [])
 
   // Save data to localStorage whenever records change
+  // Remove automatic saving to localStorage
   useEffect(() => {
-    localStorage.setItem("ramadhanRecords", JSON.stringify(records))
-  }, [records])
+    //This effect is removed.  Saving is now handled by the saveData function and the button.
+  }, [])
 
   // Update the current date every minute
   useEffect(() => {
@@ -110,6 +110,11 @@ export function RamadhanTracker() {
   // Check if the current date is within Ramadhan
   const isRamadhan = currentDate >= ramadhanStart && currentDate <= ramadhanEnd
 
+  const saveData = () => {
+    localStorage.setItem("ramadhanRecords", JSON.stringify(records))
+    alert("Data saved successfully!")
+  }
+
   return (
     <div className="space-y-6">
       <Card>
@@ -132,6 +137,9 @@ export function RamadhanTracker() {
           </CardHeader>
           <CardContent>
             <DailyTracker record={getCurrentDateRecord()} onUpdateActivity={updateActivity} />
+            <div className="mt-4">
+              <Button onClick={saveData}>Save Progress</Button>
+            </div>
           </CardContent>
         </Card>
       )}

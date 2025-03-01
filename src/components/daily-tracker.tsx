@@ -1,5 +1,3 @@
-"use client"
-
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import type { Activity, DailyRecord } from "@/components/ramadhan-tracker"
