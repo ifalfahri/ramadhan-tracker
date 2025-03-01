@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { addDays, differenceInDays, format } from "date-fns";
-import { enUS, id } from "date-fns/locale"
+import { enUS, id } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -145,13 +145,11 @@ export function RamadhanTracker() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-        <p className="text-2xl font-bold">
-  {format(
-    currentDate, 
-    "EEEE, d MMMM yyyy", 
-    { locale: i18n.language === "id" ? id : enUS }
-  )}
-</p>
+          <p className="text-2xl font-bold">
+            {format(currentDate, "EEEE, d MMMM yyyy", {
+              locale: i18n.language === "id" ? id : enUS,
+            })}
+          </p>
         </CardContent>
       </Card>
 
@@ -166,8 +164,10 @@ export function RamadhanTracker() {
               record={getCurrentDateRecord()}
               onUpdateActivity={updateActivity}
             />
-            <div className="mt-4">
-              <Button onClick={saveData}>{t("saveProgress")}</Button>
+            <div className="mt-4 flex justify-end md:jus">
+              <Button className="w-full sm:w-auto" onClick={saveData}>
+                {t("saveProgress")}
+              </Button>
             </div>
           </CardContent>
         </Card>
