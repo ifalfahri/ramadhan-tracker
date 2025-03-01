@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DailyTracker } from "@/components/daily-tracker"
 import { ProgressSummary } from "@/components/progress-summary"
 import { Button } from "@/components/ui/button"
+import { useTranslation } from "react-i18next"
 
 // Define the structure for tracking activities
 export type Activity = "puasa" | "shubuh" | "dzuhr" | "ashr" | "maghrib" | "isya" | "tarawih"
@@ -16,13 +17,14 @@ export type DailyRecord = {
 // Get Ramadhan dates
 const getRamadhanDates = () => {
   const currentYear = new Date().getFullYear()
-  const ramadhanStart = new Date(currentYear, 2, 1) // March 1, 2024
+  const ramadhanStart = new Date(currentYear, 2, 1) // March 1, 2025
   const ramadhanEnd = addDays(ramadhanStart, 29) // 30 days later
 
   return { ramadhanStart, ramadhanEnd }
 }
 
 export function RamadhanTracker() {
+  const { t } = useTranslation();
   const { ramadhanStart, ramadhanEnd } = getRamadhanDates()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [records, setRecords] = useState<DailyRecord[]>([])
@@ -112,16 +114,16 @@ export function RamadhanTracker() {
 
   const saveData = () => {
     localStorage.setItem("ramadhanRecords", JSON.stringify(records))
-    alert("Data saved successfully!")
+    alert(t('dataSaved'))
   }
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Ramadhan Tracker</CardTitle>
+          <CardTitle>{t('appTitle')}</CardTitle>
           <CardDescription>
-            {isRamadhan ? `Today is Day ${dayOfRamadhan} of Ramadhan` : "It's not currently Ramadhan"}
+            {isRamadhan ? t('todayIs', { day: dayOfRamadhan }) : t('notRamadhan')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -132,13 +134,13 @@ export function RamadhanTracker() {
       {isRamadhan && (
         <Card>
           <CardHeader>
-            <CardTitle>Today's Activities</CardTitle>
-            <CardDescription>Track your daily activities</CardDescription>
+            <CardTitle>{t('todayActivities')}</CardTitle>
+            <CardDescription>{t('trackActivities')}</CardDescription>
           </CardHeader>
           <CardContent>
             <DailyTracker record={getCurrentDateRecord()} onUpdateActivity={updateActivity} />
             <div className="mt-4">
-              <Button onClick={saveData}>Save Progress</Button>
+              <Button onClick={saveData}>{t('saveProgress')}</Button>
             </div>
           </CardContent>
         </Card>
@@ -146,20 +148,20 @@ export function RamadhanTracker() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Your Ramadhan Journey</CardTitle>
+          <CardTitle>{t('ramadhanJourney')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="summary">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="summary">Summary</TabsTrigger>
-              <TabsTrigger value="statistics">Statistics</TabsTrigger>
+              <TabsTrigger value="summary">{t('summary')}</TabsTrigger>
+              <TabsTrigger value="statistics">{t('statistics')}</TabsTrigger>
             </TabsList>
             <TabsContent value="summary" className="mt-4">
               <ProgressSummary records={records} />
             </TabsContent>
             <TabsContent value="statistics" className="mt-4">
               <div className="text-center py-8">
-                <p className="text-muted-foreground">Detailed statistics will be available as you track more days.</p>
+                <p className="text-muted-foreground">{t('statsComingSoon')}</p>
               </div>
             </TabsContent>
           </Tabs>

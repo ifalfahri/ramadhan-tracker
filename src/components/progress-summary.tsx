@@ -1,12 +1,15 @@
 import type { DailyRecord } from "@/components/ramadhan-tracker"
 import { Progress } from "@/components/ui/progress"
 import { Moon, Sunrise, Sun, Sunset, CloudMoon, Star, Coffee } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 interface ProgressSummaryProps {
   records: DailyRecord[]
 }
 
 export function ProgressSummary({ records }: ProgressSummaryProps) {
+  const { t } = useTranslation();
+  
   // Calculate statistics
   const totalDays = records.length
 
@@ -32,38 +35,43 @@ export function ProgressSummary({ records }: ProgressSummaryProps) {
   const activities = [
     {
       id: "puasa",
-      label: "Fasting (Puasa)",
+      label: t('activities.puasa'),
       icon: <Coffee className="h-5 w-5 text-orange-500" />,
       count: activityStats.puasa,
     },
     {
       id: "shubuh",
-      label: "Shubuh Prayer",
+      label: t('activities.shubuh'),
       icon: <Sunrise className="h-5 w-5 text-amber-500" />,
       count: activityStats.shubuh,
     },
     {
       id: "dzuhr",
-      label: "Dzuhr Prayer",
+      label: t('activities.dzuhr'),
       icon: <Sun className="h-5 w-5 text-yellow-500" />,
       count: activityStats.dzuhr,
     },
     {
       id: "ashr",
-      label: "Ashr Prayer",
+      label: t('activities.ashr'),
       icon: <Sunset className="h-5 w-5 text-orange-500" />,
       count: activityStats.ashr,
     },
     {
       id: "maghrib",
-      label: "Maghrib Prayer",
+      label: t('activities.maghrib'),
       icon: <CloudMoon className="h-5 w-5 text-indigo-500" />,
       count: activityStats.maghrib,
     },
-    { id: "isya", label: "Isya Prayer", icon: <Moon className="h-5 w-5 text-blue-500" />, count: activityStats.isya },
+    { 
+      id: "isya", 
+      label: t('activities.isya'), 
+      icon: <Moon className="h-5 w-5 text-blue-500" />, 
+      count: activityStats.isya 
+    },
     {
       id: "tarawih",
-      label: "Tarawih Prayer",
+      label: t('activities.tarawih'),
       icon: <Star className="h-5 w-5 text-purple-500" />,
       count: activityStats.tarawih,
     },
@@ -73,17 +81,17 @@ export function ProgressSummary({ records }: ProgressSummaryProps) {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 bg-emerald-50 dark:bg-emerald-900/50 rounded-lg">
-          <h3 className="text-lg font-medium mb-2">Days Tracked</h3>
+          <h3 className="text-lg font-medium mb-2">{t('daysTracked')}</h3>
           <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{totalDays}</p>
         </div>
         <div className="p-4 bg-emerald-50 dark:bg-emerald-900/50 rounded-lg">
-          <h3 className="text-lg font-medium mb-2">Perfect Days</h3>
+          <h3 className="text-lg font-medium mb-2">{t('perfectDays')}</h3>
           <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{perfectDays}</p>
         </div>
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Activity Completion</h3>
+        <h3 className="text-lg font-medium">{t('activityCompletion')}</h3>
 
         {activities.map((activity) => (
           <div key={activity.id} className="space-y-2">
@@ -93,7 +101,7 @@ export function ProgressSummary({ records }: ProgressSummaryProps) {
                 <span>{activity.label}</span>
               </div>
               <span className="text-sm font-medium">
-                {activity.count}/{totalDays} days
+                {t('daysCount', { count: activity.count, total: totalDays })}
               </span>
             </div>
             <Progress value={getPercentage(activity.count)} className="h-2" />
